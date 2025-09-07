@@ -99,7 +99,10 @@ export default function Dashboard() {
           {activeTab === 'overview' && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {/* Stats Cards */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+              <div 
+                className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 cursor-pointer hover:shadow-md transition-shadow"
+                onClick={() => setActiveTab('my-tools')}
+              >
                 <div className="flex items-center">
                   <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
                     <ToolCaseIcon className="w-6 h-6 text-green-600 dark:text-green-400" />
@@ -115,7 +118,10 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+              <div 
+                className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 cursor-pointer hover:shadow-md transition-shadow"
+                onClick={() => setActiveTab('bookings')}
+              >
                 <div className="flex items-center">
                   <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
                     <Calendar className="w-6 h-6 text-blue-600 dark:text-blue-400" />
@@ -137,7 +143,10 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+              <div 
+                className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 cursor-pointer hover:shadow-md transition-shadow"
+                onClick={() => setActiveTab('bookings')}
+              >
                 <div className="flex items-center">
                   <div className="p-2 bg-yellow-100 dark:bg-yellow-900 rounded-lg">
                     <Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
