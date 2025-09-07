@@ -1,22 +1,14 @@
 import express from 'express';
-import Message from '../models/Message.js';
 import { protect } from '../middleware/auth.js';
+import { sendMessage, getMessages, getConversations } from '../controllers/message.controller.js';
+
 const router = express.Router();
 
-// SEND
-router.post('/', protect, async (req, res) => {
-  const msg = await Message.create({
-    booking: req.body.bookingId,
-    sender: req.user._id,
-    text: req.body.text
-  });
-  req.io.to(req.body.bookingId).emit('newMessage', msg);  // sockets wired in server.js
-  res.status(201).json(msg);
-});
+// All routes are protected
+router.use(protect);
 
-// LIST BY BOOKING
-router.get('/:bookingId', protect, async (req, res) => {
-  const msgs = await Message.find({booking:req.params.bookingId}).populate('sender','name avatar');
-  res.json(msgs);
-});
+router.post('/', sendMessage);
+router.get('/conversations', getConversations);
+router.get('/booking/:bookingId', getMessages);
+
 export default router;
