@@ -54,7 +54,6 @@ export default function Dashboard() {
     { id: 'overview', label: 'Overview', icon: Calendar },
     { id: 'my-tools', label: 'My Tools', icon: ToolCaseIcon },
     { id: 'bookings', label: 'Bookings', icon: Calendar },
-    { id: 'messages', label: 'Messages', icon: MessageCircle },
   ];
 
   return (
@@ -283,7 +282,11 @@ export default function Dashboard() {
                   ) : (
                     <div className="space-y-4">
                       {bookings.asRenter.map((booking) => (
-                        <div key={booking._id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                        <div 
+                          key={booking._id} 
+                          className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+                          onClick={() => navigate(`/bookings/${booking._id}`)}
+                        >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-4">
                               <img
@@ -344,7 +347,11 @@ export default function Dashboard() {
                   ) : (
                     <div className="space-y-4">
                       {bookings.asOwner.map((booking) => (
-                        <div key={booking._id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                        <div 
+                          key={booking._id} 
+                          className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+                          onClick={() => navigate(`/bookings/${booking._id}`)}
+                        >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-4">
                               <img
@@ -383,26 +390,7 @@ export default function Dashboard() {
             </div>
           )}
 
-          {activeTab === 'messages' && (
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-              <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Messages
-                </h2>
-              </div>
-              <div className="p-6">
-                <div className="text-center py-12">
-                  <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-                    No messages yet
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Messages will appear here when you have active bookings.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
+
         </div>
       </div>
     </div>

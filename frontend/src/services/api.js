@@ -85,6 +85,14 @@ export const api = createApi({
       query: () => '/auth/me',
       providesTags: ['User'],
     }),
+    updateProfilePhoto: builder.mutation({
+      query: (formData) => ({
+        url: '/auth/profile-photo',
+        method: 'PUT',
+        body: formData,
+      }),
+      invalidatesTags: ['User'],
+    }),
     logout: builder.mutation({
       query: () => ({
         url: '/auth/logout',
@@ -238,6 +246,7 @@ export const {
   useRegisterMutation,
   useLoginMutation,
   useGetProfileQuery,
+  useUpdateProfilePhotoMutation,
   useLogoutMutation,
   
   // Tool hooks

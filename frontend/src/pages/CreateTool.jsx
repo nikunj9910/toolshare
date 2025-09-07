@@ -18,6 +18,8 @@ export default function CreateTool() {
     images: []
   });
 
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
   const categories = [
     'Power Tools',
     'Garden',
@@ -36,10 +38,13 @@ export default function CreateTool() {
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    if (files.length + formData.images.length > 5) {
+    if (files.length + selectedFiles.length > 5) {
       toast.error('Maximum 5 images allowed');
       return;
     }
+
+    const validFiles = [];
+    const previewUrls = [];
 
     files.forEach(file => {
       if (file.size > 5 * 1024 * 1024) { // 5MB limit
@@ -47,15 +52,23 @@ export default function CreateTool() {
         return;
       }
 
+      validFiles.push(file);
+      
+      // Create preview URL
       const reader = new FileReader();
       reader.onload = (e) => {
-        setFormData(prev => ({
-          ...prev,
-          images: [...prev.images, e.target.result]
-        }));
+        previewUrls.push(e.target.result);
+        if (previewUrls.length === validFiles.length) {
+          setFormData(prev => ({
+            ...prev,
+            images: [...prev.images, ...previewUrls]
+          }));
+        }
       };
       reader.readAsDataURL(file);
     });
+
+    setSelectedFiles(prev => [...prev, ...validFiles]);
   };
 
   const removeImage = (index) => {
@@ -63,6 +76,7 @@ export default function CreateTool() {
       ...prev,
       images: prev.images.filter((_, i) => i !== index)
     }));
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
@@ -79,7 +93,21 @@ export default function CreateTool() {
     }
 
     try {
-      const response = await createTool(formData).unwrap();
+      // Create FormData for file upload
+      const submitData = new FormData();
+      submitData.append('title', formData.title);
+      submitData.append('description', formData.description);
+      submitData.append('category', formData.category);
+      submitData.append('priceHourly', formData.priceHourly || 0);
+      submitData.append('priceDaily', formData.priceDaily);
+      submitData.append('deposit', formData.deposit || 0);
+
+      // Append image files
+      selectedFiles.forEach((file, index) => {
+        submitData.append('images', file);
+      });
+
+      const response = await createTool(submitData).unwrap();
       toast.success('Tool created successfully!');
       navigate(`/tools/${response.data._id}`);
     } catch (error) {

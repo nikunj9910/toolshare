@@ -162,3 +162,27 @@ export const getProfile = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Update profile photo
+// @route   PUT /api/auth/profile-photo
+// @access  Private
+export const updateProfilePhoto = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json(new ApiResponse(400, null, 'No image file provided'));
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json(new ApiResponse(404, null, 'User not found'));
+    }
+
+    // Update user avatar
+    user.avatar = req.file.path;
+    await user.save();
+
+    res.json(new ApiResponse(200, { avatar: user.avatar }, 'Profile photo updated successfully'));
+  } catch (error) {
+    next(error);
+  }
+};

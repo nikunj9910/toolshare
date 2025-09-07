@@ -102,6 +102,7 @@ export const getTool = async (req, res, next) => {
 // @access  Private
 export const createTool = async (req, res, next) => {
   try {
+
     const {
       title,
       description,
@@ -138,8 +139,10 @@ export const createTool = async (req, res, next) => {
 
     await tool.populate('ownerId', 'name avatar ratingAvg ratingCount');
 
+    console.log('createTool - created tool:', tool);
     res.status(201).json(new ApiResponse(201, tool, 'Tool created successfully'));
   } catch (error) {
+    console.error('createTool - error:', error);
     next(error);
   }
 };
