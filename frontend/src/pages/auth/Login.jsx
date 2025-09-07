@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { useLoginMutation } from '../../services/api';
-import { setCredentials } from '../../store/slices/authSlice';
+import { useLoginMutation, api } from '../../services/api';
+import { setCredentials, clearUserData } from '../../store/slices/authSlice';
 import toast from 'react-hot-toast';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 
@@ -33,6 +33,10 @@ const Login = () => {
     setIsLoading(true);
 
     try {
+      // Clear any existing user data and API cache
+      dispatch(clearUserData());
+      dispatch(api.util.resetApiState());
+      
       const response = await loginMutation(formData).unwrap();
       const { token, refreshToken, ...userData } = response.data;
       

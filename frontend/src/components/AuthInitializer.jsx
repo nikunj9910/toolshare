@@ -5,9 +5,9 @@ import { setCredentials } from '../store/slices/authSlice';
 
 const AuthInitializer = ({ children }) => {
   const dispatch = useDispatch();
-  const { token, isAuthenticated } = useSelector((state) => state.auth);
+  const { token, isAuthenticated, user } = useSelector((state) => state.auth);
   
-  // Only fetch profile if we have a token but no user data
+  // Fetch profile if we have a token but no user data (or user data is stale)
   const { data: profileData, error } = useGetProfileQuery(undefined, {
     skip: !token || !isAuthenticated,
   });

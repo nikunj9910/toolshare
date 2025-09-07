@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../store/slices/authSlice';
-import { useLogoutMutation } from '../services/api';
+import { useLogoutMutation, api } from '../services/api';
 import { Menu, X, User, LogOut, Plus, LayoutDashboard } from 'lucide-react';
 import DarkModeToggle from './DarkModeToggle';
 
@@ -17,10 +17,12 @@ const Navbar = () => {
     try {
       await logoutMutation().unwrap();
       dispatch(logout());
+      dispatch(api.util.resetApiState()); // Clear API cache
       navigate('/');
     } catch (error) {
       console.error('Logout error:', error);
       dispatch(logout()); // Logout locally even if API call fails
+      dispatch(api.util.resetApiState()); // Clear API cache
     }
   };
 
